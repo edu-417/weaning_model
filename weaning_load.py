@@ -26,4 +26,7 @@ interpreter.invoke()
 
 # Obtener los resultados de la inferencia
 output_data = interpreter.get_tensor(output_details[0]['index'])
-print("Resultado de la inferencia:", output_data)
+
+print("X_test 0:", X_test[0])
+print("Input_details 0:", input_details[0])
+print("Output_details 0:", output_details[0])
