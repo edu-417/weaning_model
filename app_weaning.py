@@ -155,7 +155,7 @@ def main():
     
     scaler = loadScaler()
     
-    interpreter = loadModel()
+    interpreter = loadModelInterpreter()
     
     while True:
         event, values = window.read()
