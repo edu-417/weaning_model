@@ -60,7 +60,7 @@ def infer(values, column1, column2, column3, scaler, interpreter):
             key = row[1].Key  # Obtener la clave del InputText
             numpy_array.append(values[key])
     
-    numpy_array = np.array(numpy_array, dtype=float)
+    numpy_array = np.array([numpy_array], dtype=float)
     
     X_test = scaler.transform(numpy_array)
     
