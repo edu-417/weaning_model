@@ -18,7 +18,7 @@ def gui():
         [sg.Text('Edad', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputEdad', size=(15, 1), enable_events=True), sg.Text('años')],
         [sg.Text('F. Respiratoria', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputFrecuenciaRespiratoria', size=(15, 1), enable_events=True), sg.Text('r/min')],
         [sg.Text('Volumen Tidal', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputVolumenTidal', size=(15, 1), enable_events=True), sg.Text('mL')],
-        [sg.Text('Presión Pausa', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputPresionPausa', size=(15, 1), enable_events=True), sg.Text('cmH2O')]
+        [sg.Text('Presión Pausa', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputPresionPausa', size=(15, 1), enable_events=True), sg.Text('cmH2O')],
         [sg.Text('Driving Presion', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputDrivingPresion', size=(15, 1), enable_events=True), sg.Text('cmH2O')],
         [sg.Text('PEEP', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputPeep', size=(15, 1), enable_events=True), sg.Text('cmH2O')]
     ]
@@ -31,6 +31,7 @@ def gui():
         [sg.Text('PH', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputPh', size=(15, 1), enable_events=True), sg.Text('X')],
         [sg.Text('P. Arterial', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputPresionArterial', size=(15, 1), enable_events=True), sg.Text('mmHg')]
 
+    ]
 
     column3 = [
     
@@ -61,13 +62,13 @@ def infer(values, column1, column2, column3, scaler, interpreter,data):
     for column in [column1, column2, column3]:
         for row in column:
             key = row[1].Key  # Obtener la clave del InputText
-            numpy_array.append(values[key])
+            numpy_array.append(float(values[key]))
             
-    numpy_array.append(getPhClass(values["inputPh"]))
-    numpy_array.append(getVtClass(data,values["inputVolumenTidal"]))
-    numpy_array.append(getDpClass(data,values["inputDrivingPresion"]))
-    numpy_array.append(getPeepClass(data,values["inputPeep"]))   
-    numpy_array.append(getPpausaClass(data,values["inputPresionPausa"]))   
+    numpy_array.append(getPhClass(float(values["inputPh"])))
+    numpy_array.append(getVtClass(data,float(values["inputVolumenTidal"])))
+    numpy_array.append(getDpClass(data,float(values["inputDrivingPresion"])))
+    numpy_array.append(getPeepClass(data,float(values["inputPeep"])))   
+    numpy_array.append(getPpausaClass(data,float(values["inputPresionPausa"])))   
 
     
     numpy_array = np.array([numpy_array], dtype=float)
@@ -154,7 +155,7 @@ def loadScaler():
     #data = pd.read_excel("dataset_weaning.xlsx")
     #data["Ph"]=data["Ph"].replace(",",".",regex=True).astype(float)
     
-    loadData()
+    data = loadData()
     
     data.loc[data.Ph>=9,"PhClass"]=1
     data.loc[data.Ph<9,"PhClass"]=0
