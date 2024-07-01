@@ -28,7 +28,7 @@ def gui():
         [sg.Text('S. Oxígeno', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputSaturacionOxigeno', size=(15, 1), enable_events=True), sg.Text('%')],
         [sg.Text('Pco2', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputPco', size=(15, 1), enable_events=True), sg.Text('mmHg')],
         [sg.Text('PAFI', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputPafi', size=(15, 1), enable_events=True), sg.Text('ml/cmH2O')],
-        [sg.Text('PH', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputPh', size=(15, 1), enable_events=True), sg.Text('X')],
+        [sg.Text('PH', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputPh', size=(15, 1), enable_events=True), sg.Text('')],
         [sg.Text('P. Arterial', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputPresionArterial', size=(15, 1), enable_events=True), sg.Text('mmHg')]
 
     ]
@@ -43,8 +43,11 @@ def gui():
     ]
 
 
+
+
     frame_layout = [
         [sg.Column(column1), sg.Column(column2), sg.Column(column3)],
+        [sg.Text('Días', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='dias', size=(15, 1), enable_events=True)],
         [sg.Button('Inferir'), sg.Button('Limpiar'), sg.Button('Salir')]
     ]
 
@@ -72,6 +75,7 @@ def infer(values, column1, column2, column3, scaler, interpreter,data):
 
     
     numpy_array = np.array([numpy_array], dtype=float)
+    print(numpy_array)
     
     X_test = scaler.transform(numpy_array)
     
@@ -92,7 +96,9 @@ def infer(values, column1, column2, column3, scaler, interpreter,data):
     # Obtener los resultados de la inferencia
     output_data = interpreter.get_tensor(output_details[0]['index'])
     
-    print(numpy_array)
+    values["dias"] = output_data
+    print(output_data)  
+
 
 def getPhClass(ph):
     
