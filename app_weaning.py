@@ -47,7 +47,7 @@ def gui():
 
     frame_layout = [
         [sg.Column(column1), sg.Column(column2), sg.Column(column3)],
-        [sg.Text('Días', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='dias', size=(15, 1), enable_events=True)],
+        [sg.Text('Días', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='dias', size=(40, 6))],
         [sg.Button('Inferir'), sg.Button('Limpiar'), sg.Button('Salir')]
     ]
 
@@ -60,7 +60,7 @@ def gui():
     
     return window, column1, column2, column3
 
-def infer(values, column1, column2, column3, scaler, interpreter,data):
+def infer(values, column1, column2, column3, scaler, interpreter,data, window):
     numpy_array = []
     for column in [column1, column2, column3]:
         for row in column:
@@ -75,7 +75,7 @@ def infer(values, column1, column2, column3, scaler, interpreter,data):
 
     
     numpy_array = np.array([numpy_array], dtype=float)
-    print(numpy_array)
+    #print(numpy_array)
     
     X_test = scaler.transform(numpy_array)
     
@@ -96,8 +96,8 @@ def infer(values, column1, column2, column3, scaler, interpreter,data):
     # Obtener los resultados de la inferencia
     output_data = interpreter.get_tensor(output_details[0]['index'])
     
-    values["dias"] = output_data
-    print(output_data)  
+    window["dias"].update(output_data[0][0])
+    print(output_data[0][0])  
 
 
 def getPhClass(ph):
@@ -240,7 +240,7 @@ def main():
                 window[key]('')
         
         if event == 'Inferir':  
-            infer(values, column1, column2, column3, scaler, interpreter, data)
+            infer(values, column1, column2, column3, scaler, interpreter, data, window)
         
         for key in values:
             if event == key:
