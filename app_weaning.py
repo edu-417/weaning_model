@@ -1,5 +1,4 @@
 import PySimpleGUI as sg
-import re
 import numpy as np
 import pandas as pd
 import tflite_runtime.interpreter as tflite
@@ -42,9 +41,6 @@ def gui():
         [sg.Text('Hematocrito', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='inputHematocrito', size=(15, 1), enable_events=True), sg.Text('%')]
     ]
 
-
-
-
     frame_layout = [
         [sg.Column(column1), sg.Column(column2), sg.Column(column3)],
         [sg.Text('Días', size=(15, 1), font='Helvetica 12 bold', text_color='navy'), sg.InputText(key='dias', size=(40, 6))],
@@ -53,12 +49,29 @@ def gui():
 
     layout = [
         [sg.Text('Etapa 1', size=(15, 1), background_color='navy', text_color='white', justification='center', pad=((0, 0), (10, 10)))],
-        [sg.Frame('', frame_layout, pad=(0, 0))]
+        [sg.Frame('', frame_layout, pad=(0, 0))],
+        [keyboard_frame()]
     ]
 
-    window = sg.Window('Formulario destete', layout)
+    window = sg.Window('Formulario destete', layout, finalize=True)
+
+    # window['inputFrecuenciaCardiaca'].bind('<FocusIn>', '+INPUT FOCUS+')
+
+    for column in [column1, column2, column3]:
+        for row in column:
+            key = row[1].Key  # Obtener la clave del InputText
+            window[key].bind('<FocusIn>', '+INPUT FOCUS+')
     
     return window, column1, column2, column3
+
+def keyboard_frame():
+    frame_layout = [
+        [sg.Button('1'), sg.Button('2'), sg.Button('3')],
+        [sg.Button('4'), sg.Button('5'), sg.Button('6')],
+        [sg.Button('7'), sg.Button('8'), sg.Button('9')]
+    ]
+
+    return sg.Frame('', frame_layout, pad=(1, 1))
 
 def infer(values, column1, column2, column3, scaler, interpreter,data, window):
     numpy_array = []
@@ -158,9 +171,6 @@ def loadData():
      return data 
 
 def loadScaler():
-    #data = pd.read_excel("dataset_weaning.xlsx")
-    #data["Ph"]=data["Ph"].replace(",",".",regex=True).astype(float)
-    
     data = loadData()
     
     data.loc[data.Ph>=9,"PhClass"]=1
@@ -228,12 +238,23 @@ def main():
     scaler = loadScaler()
     
     interpreter = loadModelInterpreter()
-    
+    focused_element = None
+
     while True:
         event, values = window.read()
+
+        if event is not None:
+            print(f"event: {event}")
     
         if event == sg.WIN_CLOSED or event == 'Salir': 
             break
+
+        if event.endswith("+INPUT FOCUS+"):
+            focused_element = event.split("+")[0]
+
+        if focused_element is not None and event >= '1' and event <= '9':
+            window[focused_element].update(f"{window[focused_element].get()}{event}")
+
         
         if event == 'Limpiar':  
             for key in values:
