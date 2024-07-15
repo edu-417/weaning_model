@@ -240,7 +240,7 @@ def main():
     scaler = loadScaler()
     
     interpreter = loadModelInterpreter()
-    focused_element = None
+    focused_element = 'inputEdad'
 
     while True:
         event, values = window.read()
