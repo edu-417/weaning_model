@@ -70,7 +70,7 @@ def keyboard_frame():
         [sg.Button('1'), sg.Button('2'), sg.Button('3')],
         [sg.Button('4'), sg.Button('5'), sg.Button('6')],
         [sg.Button('7'), sg.Button('8'), sg.Button('9')],
-        [sg.Button('0'), sg.Button('.')]
+        [sg.Button('0'), sg.Button('.'), sg.Button('Borrar')]
     ]
 
     return sg.Frame('', frame_layout, pad=(1, 1))
@@ -256,7 +256,13 @@ def main():
 
         if focused_element is not None and ((event >= '0' and event <= '9') or event=='.' ):
             window[focused_element].update(f"{window[focused_element].get()}{event}")
-
+            
+        if event == 'Borrar':
+            if focused_element is not None:
+                current_value = window[focused_element].get()
+                if current_value:
+                    new_value = current_value[:-1]
+                    window[focused_element].update(new_value)
         
         if event == 'Limpiar':  
             for key in values:
