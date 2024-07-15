@@ -69,7 +69,8 @@ def keyboard_frame():
     frame_layout = [
         [sg.Button('1'), sg.Button('2'), sg.Button('3')],
         [sg.Button('4'), sg.Button('5'), sg.Button('6')],
-        [sg.Button('7'), sg.Button('8'), sg.Button('9')]
+        [sg.Button('7'), sg.Button('8'), sg.Button('9')],
+        [sg.Button('0'), sg.Button('.')]
     ]
 
     return sg.Frame('', frame_layout, pad=(1, 1))
@@ -253,7 +254,7 @@ def main():
         if event.endswith("+INPUT FOCUS+"):
             focused_element = event.split("+")[0]
 
-        if focused_element is not None and event >= '1' and event <= '9':
+        if focused_element is not None and ((event >= '0' and event <= '9') or event=='.' ):
             window[focused_element].update(f"{window[focused_element].get()}{event}")
 
         
