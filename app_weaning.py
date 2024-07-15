@@ -50,7 +50,8 @@ def gui():
     layout = [
         [sg.Text('Etapa 1', size=(15, 1), background_color='navy', text_color='white', justification='center', pad=((0, 0), (10, 10)))],
         [sg.Frame('', frame_layout, pad=(0, 0))],
-        [keyboard_frame()]
+        #[keyboard_frame()]
+        [sg.Column([[keyboard_frame()]], justification='center')]
     ]
 
     window = sg.Window('Formulario destete', layout, finalize=True)
